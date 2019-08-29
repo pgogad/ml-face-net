@@ -69,7 +69,8 @@ while True:
     if not video_capture.isOpened():
         sleep(5)
     ret, frame = video_capture.read()
-    faces = mtcnn_detector.detect_faces(frame)
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    faces = mtcnn_detector.detect_faces(frame_rgb)
 
     for i, face in enumerate(faces):
         face_array = extract_face(frame, faces[i]['box'])
@@ -80,6 +81,7 @@ while True:
         class_probability = yhat_prob[0, class_index] * 100
         predict_names = out_encoder.inverse_transform(yhat_class)
         print('Predicted: %s (%.3f)' % (predict_names[0], class_probability))
+        # cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
     cv2.imshow('Live Stream', frame)
     if cv2.waitKey(5) == 27:
         break
