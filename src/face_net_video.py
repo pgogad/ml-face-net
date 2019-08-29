@@ -40,7 +40,8 @@ def extract_face(frame, result, required_size=(160, 160)):
     return face_array
 
 
-data = np.load('faces-embeddings.npz')
+embeddings_set = os.path.join(BASE_DIR, 'data', 'model', 'faces-embeddings.npz')
+data = np.load(embeddings_set)
 trainX, trainy, testX, testy = data['arr_0'], data['arr_1'], data['arr_2'], data['arr_3']
 print('Dataset: train=%d, test=%d' % (trainX.shape[0], testX.shape[0]))
 

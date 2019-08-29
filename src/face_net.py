@@ -77,7 +77,8 @@ folder = os.path.join(BASE_DIR, 'data/val/')
 testX, testy = load_dataset(folder)
 print(testX.shape, testy.shape)
 
-savez_compressed('faces-dataset.npz', trainX, trainy, testX, testy)
+data_set = os.path.join(BASE_DIR, 'data', 'model', 'faces-dataset.npz')
+savez_compressed(data_set, trainX, trainy, testX, testy)
 
 facenet_keras = os.path.join(BASE_DIR, 'data', 'model', 'facenet_keras.h5')
 model_fn = load_model(facenet_keras)
@@ -96,15 +97,17 @@ for face_pixels in testX:
     new_test_X.append(embedding)
 new_test_X = asarray(new_test_X)
 print(new_test_X.shape)
+
 # save arrays to one file in compressed format
-savez_compressed('faces-embeddings.npz', new_train_X, trainy, new_test_X, testy)
+embeddings_set = os.path.join(BASE_DIR, 'data', 'model', 'faces-embeddings.npz')
+savez_compressed(embeddings_set, new_train_X, trainy, new_test_X, testy)
 
-data = load('faces-embeddings.npz')
-trainX, trainy, testX, testy = data['arr_0'], data['arr_1'], data['arr_2'], data['arr_3']
-print('Dataset: train=%d, test=%d' % (trainX.shape[0], testX.shape[0]))
-
-print('Inputs: %s' % model_fn.inputs)
-print('Outputs: %s' % model_fn.outputs)
+# data = load(embeddings_set)
+# trainX, trainy, testX, testy = data['arr_0'], data['arr_1'], data['arr_2'], data['arr_3']
+# print('Dataset: train=%d, test=%d' % (trainX.shape[0], testX.shape[0]))
+#
+# print('Inputs: %s' % model_fn.inputs)
+# print('Outputs: %s' % model_fn.outputs)
 
 # normalize input vectors
 # in_encoder = Normalizer(norm='l2')
