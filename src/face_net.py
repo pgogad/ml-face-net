@@ -79,7 +79,8 @@ print(testX.shape, testy.shape)
 
 savez_compressed('faces-dataset.npz', trainX, trainy, testX, testy)
 
-model_fn = load_model('facenet_keras.h5')
+facenet_keras = os.path.join(BASE_DIR, 'data', 'model', 'facenet_keras.h5')
+model_fn = load_model(facenet_keras)
 
 new_train_X = list()
 for face_pixels in trainX:

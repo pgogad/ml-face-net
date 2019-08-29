@@ -13,7 +13,8 @@ from sklearn.svm import SVC
 mtcnn_detector = MTCNN()
 BASE_DIR = os.path.dirname(__file__)
 model_dir = os.path.join(BASE_DIR, 'data', 'model')
-model_fn = load_model('facenet_keras.h5')
+facenet_keras = os.path.join(BASE_DIR, 'data', 'model', 'facenet_keras.h5')
+model_fn = load_model(facenet_keras)
 
 
 # get the face embedding for one face
