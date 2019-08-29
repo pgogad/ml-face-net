@@ -1,17 +1,12 @@
 import os
 from os import listdir
 from os.path import isdir
-from random import choice
 
 import mtcnn
-import pickle
 from PIL import Image
 from keras.models import load_model
 from mtcnn.mtcnn import MTCNN
-from numpy import asarray, savez_compressed, load, expand_dims
-from sklearn.metrics import accuracy_score
-from sklearn.preprocessing import Normalizer, LabelEncoder
-from sklearn.svm import SVC
+from numpy import asarray, savez_compressed, expand_dims
 
 print(mtcnn.__version__)
 mtcnn_detector = MTCNN()

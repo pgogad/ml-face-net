@@ -74,14 +74,17 @@ while True:
 
     for i, face in enumerate(faces):
         face_array = extract_face(frame, faces[i]['box'])
+        x, y, w, h = faces[i]['box']
         samples = np.expand_dims(get_embedding(model_fn, face_array), axis=0)
         yhat_class = model_svc.predict(samples)
         yhat_prob = model_svc.predict_proba(samples)
         class_index = yhat_class[0]
         class_probability = yhat_prob[0, class_index] * 100
         predict_names = out_encoder.inverse_transform(yhat_class)
-        print('Predicted: %s (%.3f)' % (predict_names[0], class_probability))
-        # cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
+        # print('Predicted: %s (%.3f)' % (predict_names[0], class_probability))
+        text = '%s (probability = %.2f pc)' % (predict_names[0], class_probability)
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 0), 2)
+        cv2.putText(frame, text, (x, h), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), lineType=cv2.LINE_8)
     cv2.imshow('Live Stream', frame)
     if cv2.waitKey(5) == 27:
         break
