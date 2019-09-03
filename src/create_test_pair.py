@@ -14,9 +14,14 @@ print(mtcnn.__version__)
 mtcnn_detector = MTCNN()
 
 
+def check_dir(file_name):
+    if not os.path.exists(file_name):
+        os.mkdir(file_name)
+
+
 def add_files(dir):
-    for f in os.listdir(os.path.join(ALIGNED_DIR, dir)):
-        list_pics.append(os.path.join(ALIGNED_DIR, dir, f))
+    for f in os.listdir(dir):
+        list_pics.append(os.path.join(dir, f))
 
 
 # extract a single face from a given photograph
@@ -43,11 +48,6 @@ def load_faces(directory, aligned_dir, required_size=(128, 128)):
         extract_face(path, save_path, required_size=required_size)
 
 
-def check_dir(file_name):
-    if not os.path.exists(file_name):
-        os.mkdir(file_name)
-
-
 ALIGNED_DIR = os.path.join(BASE_DIR, 'data', 'aligned')
 check_dir(ALIGNED_DIR)
 
@@ -60,11 +60,36 @@ for dir in os.listdir(PICS_BASE):
     load_faces(os.path.join(BASE_DIR, 'data', 'test_pics', dir), aligned_dir)
 
 for dir in os.listdir(ALIGNED_DIR):
-    add_files(dir)
+    path = os.path.join(ALIGNED_DIR, dir)
+    add_files(path)
 
 test_file = os.path.join(BASE_DIR, 'data', 'my_train.txt')
 with open(test_file, 'wb') as file:
     for _ in range(5000):
+        y = 0
+        [file1, file2] = random.sample(list_pics, 2)
+        base_1 = os.path.dirname(file1)
+        base_2 = os.path.dirname(file2)
+
+        if base_1 == base_2:
+            y = 1
+
+        pair = "{} {} {}\r\n".format(file1, file2, y)
+        file.write(pair.encode())
+
+list_pics = list()
+for dir in os.listdir(os.path.join(BASE_DIR, 'data', 'val')):
+    aligned_val_dir = os.path.join(BASE_DIR, 'data', 'aligned_val', dir)
+    check_dir(aligned_val_dir)
+    load_faces(os.path.join(BASE_DIR, 'data', 'val', dir), aligned_val_dir)
+
+for dir in os.listdir(os.path.join(BASE_DIR, 'data', 'aligned_val')):
+    path = os.path.join(BASE_DIR, 'data', 'aligned_val', dir)
+    add_files(path)
+
+test_file = os.path.join(BASE_DIR, 'data', 'my_val.txt')
+with open(test_file, 'wb') as file:
+    for _ in range(2000):
         y = 0
         [file1, file2] = random.sample(list_pics, 2)
         base_1 = os.path.dirname(file1)
