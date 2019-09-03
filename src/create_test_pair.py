@@ -39,21 +39,24 @@ def load_faces(directory, aligned_dir, required_size=(128, 128)):
     for filename in os.listdir(directory):
         path = os.path.join(directory, filename)
         save_path = os.path.join(aligned_dir, filename)
-        if not os.path.exists(aligned_dir):
-            os.mkdir(aligned_dir)
+        check_dir(aligned_dir)
         extract_face(path, save_path, required_size=required_size)
 
 
+def check_dir(file_name):
+    if not os.path.exists(file_name):
+        os.mkdir(file_name)
+
+
 ALIGNED_DIR = os.path.join(BASE_DIR, 'data', 'aligned')
-if not os.path.exists(ALIGNED_DIR):
-    os.mkdir(ALIGNED_DIR)
+check_dir(ALIGNED_DIR)
+
+ALIGNED_VAL_DIR = os.path.join(BASE_DIR, 'data', 'aligned_val')
+check_dir(ALIGNED_VAL_DIR)
 
 for dir in os.listdir(PICS_BASE):
     aligned_dir = os.path.join(BASE_DIR, 'data', 'aligned', dir)
-
-    if not os.path.exists(aligned_dir):
-        os.mkdir(aligned_dir)
-
+    check_dir(aligned_dir)
     load_faces(os.path.join(BASE_DIR, 'data', 'test_pics', dir), aligned_dir)
 
 for dir in os.listdir(ALIGNED_DIR):
