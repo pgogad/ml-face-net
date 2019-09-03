@@ -15,3 +15,5 @@ opencv-python
 opencv-contrib-python
 gensim
 scikit-image
+torch
+torchvision
