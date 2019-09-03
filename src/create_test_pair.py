@@ -2,7 +2,7 @@ import os
 import random
 
 BASE_DIR = os.path.dirname(__file__)
-PICS_BASE = os.path.join(BASE_DIR, 'data', 'test_pics')
+PICS_BASE = os.path.join(BASE_DIR, 'data', 'val')
 
 list_pics = list()
 
@@ -15,7 +15,7 @@ def add_files(dir):
 for dir in os.listdir(PICS_BASE):
     add_files(dir)
 
-test_file = os.path.join(BASE_DIR, 'data', 'my_train.txt')
+test_file = os.path.join(BASE_DIR, 'data', 'my_val.txt')
 with open(test_file, 'wb') as file:
     for _ in range(5000):
         y = 0
