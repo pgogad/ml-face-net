@@ -69,13 +69,16 @@ val_data_set = prepare_val_database()
 
 total = 0
 correct = 0
-in_correct = 0
 
 for k in val_data_set.keys():
+    total += 1
     name = who_is_it(val_data_set[k], data_set, FRmodel)
     if name is not None:
         print('Expected name %s Actual name %s' % (k, name))
-        if name[]
-
+        if name[:3] == k[:3]:
+            correct += 1
     else:
         print('Expected name %s Actual name %s' % (k, 'None'))
+
+accuracy = (correct / total) * 100
+print('Accuracy = %d ' % accuracy)
