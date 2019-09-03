@@ -40,7 +40,7 @@ def extract_face(filename, aligned_dir, required_size=(160, 160)):
 
 
 # load images and extract faces for all images in a directory
-def load_faces(directory, aligned_dir, required_size=(128, 128)):
+def load_faces(directory, aligned_dir, required_size=(160, 160)):
     for filename in os.listdir(directory):
         path = os.path.join(directory, filename)
         save_path = os.path.join(aligned_dir, filename)
