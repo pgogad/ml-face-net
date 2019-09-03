@@ -27,7 +27,7 @@ def add_files(dir):
 # extract a single face from a given photograph
 def extract_face(filename, aligned_dir, required_size=(160, 160)):
     image = Image.open(filename)
-    image = image.convert('RGB')
+    image = image.convert('L')
     pixels = asarray(image)
     results = mtcnn_detector.detect_faces(pixels)
     x1, y1, width, height = results[0]['box']

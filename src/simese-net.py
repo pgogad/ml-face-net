@@ -9,11 +9,16 @@ from torch import optim
 from torch.autograd import Variable
 from torch.utils import data
 
-from siamese_net_19 import SiameseNetwork
+from siamese_net import SiameseNetwork
+
+BASE_DIR = os.path.dirname(__file__)
+
+
+def save_checkpoint(state, filename=os.path.join(BASE_DIR, 'data', 'model', 'siamese')):
+    torch.save(state, filename)
 
 
 def adjust_learning_rate(optimizer, epoch):
-    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
     lr = 0.01 * (0.1 ** (epoch // 3))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
@@ -72,7 +77,6 @@ class ContrastiveLoss(torch.nn.Module):
 
 class train_ImageList(data.Dataset):
     def __init__(self, file_list, transform=None, list_reader=default_list_reader, train_loader=img_loader):
-        # self.root      = root
         self.imgList = list_reader(file_list)
         self.transform = transform
         self.train_loader = train_loader
@@ -91,7 +95,6 @@ class train_ImageList(data.Dataset):
         return len(self.imgList)
 
 
-BASE_DIR = os.path.dirname(__file__)
 train_txt = os.path.join(BASE_DIR, 'data', 'my_train.txt')
 
 transformer = transforms.Compose([transforms.Resize((128, 128)), transforms.ToTensor(), ])
