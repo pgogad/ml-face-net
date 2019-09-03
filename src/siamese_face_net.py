@@ -49,7 +49,7 @@ def who_is_it(image, database, model):
     # Loop over the database dictionary's names and encodings.
     for (name, db_enc) in database.items():
         dist = np.linalg.norm(db_enc - encoding)
-        # print('distance for %s is %s' % (name, dist))
+
         if dist < min_dist:
             min_dist = dist
             identity = name
