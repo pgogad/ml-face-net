@@ -1,3 +1,7 @@
 .idea/
 *.pyc
 *.pt
+src/data/test_pics/.DS_Store
+src/.DS_Store
+src/data/.DS_Store
+.DS_Store

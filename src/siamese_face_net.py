@@ -67,9 +67,15 @@ load_weights_from_FaceNet(FRmodel)
 data_set = prepare_database()
 val_data_set = prepare_val_database()
 
+total = 0
+correct = 0
+in_correct = 0
+
 for k in val_data_set.keys():
     name = who_is_it(val_data_set[k], data_set, FRmodel)
     if name is not None:
         print('Expected name %s Actual name %s' % (k, name))
+        if name[]
+
     else:
         print('Expected name %s Actual name %s' % (k, 'None'))
