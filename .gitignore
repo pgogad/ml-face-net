@@ -6,3 +6,4 @@ src/.DS_Store
 src/data/.DS_Store
 .DS_Store
 /src/data/lfw/
+src/data/lfw_aligned/
