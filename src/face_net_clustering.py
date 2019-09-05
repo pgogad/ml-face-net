@@ -99,10 +99,10 @@ def _chinese_whispers(encoding_list, threshold=0.55, iterations=20):
 
             for ne in neighbors:
                 if isinstance(ne, int):
-                    if G.nodes[ne]['cluster'] in clusters:
-                        clusters[G.nodes[ne]['cluster']] += G[node][ne]['weight']
+                    if G.node[ne]['cluster'] in clusters:
+                        clusters[G.node[ne]['cluster']] += G[node][ne]['weight']
                     else:
-                        clusters[G.nodes[ne]['cluster']] = G[node][ne]['weight']
+                        clusters[G.node[ne]['cluster']] = G[node][ne]['weight']
 
             # find the class with the highest edge weight sum
             edge_weight_sum = 0
@@ -114,12 +114,12 @@ def _chinese_whispers(encoding_list, threshold=0.55, iterations=20):
                     max_cluster = cluster
 
             # set the class of target node to the winning local class
-            G.nodes[node]['cluster'] = max_cluster
+            G.node[node]['cluster'] = max_cluster
 
     clusters = {}
 
     # Prepare cluster output
-    for (_, data) in G.nodes.items():
+    for (_, data) in G.node.items():
         cluster = data['cluster']
         path = data['path']
 

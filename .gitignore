@@ -14,3 +14,4 @@ src/data/model/facenet/20180408-102900/20180408-102900.pb
 src/data/model/facenet/20180408-102900/model-20180408-102900.ckpt-90.index
 src/data/model/facenet/20180408-102900/model-20180408-102900.ckpt-90.data-00000-of-00001
 src/data/model/facenet/20180408-102900/model-20180408-102900.meta
+src/data/cluster/

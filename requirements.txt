@@ -22,3 +22,4 @@ scikit-image
 torch
 torchvision
 nose
+networkx==1.11
