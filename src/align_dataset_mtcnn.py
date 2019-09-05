@@ -2,18 +2,19 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import argparse
+import os
+import random
+import sys
+from time import sleep
+
 import PIL.Image
 import imageio
-from scipy import misc
-import sys
-import os
-import argparse
-import tensorflow as tf
 import numpy as np
-import facenet
+import tensorflow as tf
+
 import detect_face
-import random
-from time import sleep
+import facenet
 
 
 def main(args):

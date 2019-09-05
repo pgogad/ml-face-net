@@ -7,3 +7,10 @@ src/data/.DS_Store
 .DS_Store
 /src/data/lfw/
 src/data/lfw_aligned/
+src/data/logs/
+src/data/model/facenet/
+/src/data/lfw_delta/
+src/data/model/facenet/20180408-102900/20180408-102900.pb
+src/data/model/facenet/20180408-102900/model-20180408-102900.ckpt-90.index
+src/data/model/facenet/20180408-102900/model-20180408-102900.ckpt-90.data-00000-of-00001
+src/data/model/facenet/20180408-102900/model-20180408-102900.meta
