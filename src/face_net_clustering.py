@@ -14,16 +14,8 @@ import facenet
 
 
 def face_distance(face_encodings, face_to_compare):
-    """
-    Given a list of face encodings, compare them to a known face encoding and get a euclidean distance
-    for each comparison face. The distance tells you how similar the faces are.
-    :param faces: List of face encodings to compare
-    :param face_to_compare: A face encoding to compare against
-    :return: A numpy ndarray with the distance for each face in the same order as the 'faces' array
-    """
-    import numpy as np
     if len(face_encodings) == 0:
-        return np.empty((0))
+        return np.empty(0)
 
     # return 1/np.linalg.norm(face_encodings - face_to_compare, axis=1)
     return np.sum(face_encodings * face_to_compare, axis=1)
@@ -217,7 +209,7 @@ def main(args):
     if not exists(args.output):
         makedirs(args.output)
 
-    with tf.Graph().as_default():
+    with tf.compat.v1.Graph().as_default():
         with tf.compat.v1.Session() as sess:
             image_paths = get_onedir(args.input)
             # image_list, label_list = facenet.get_image_paths_and_labels(train_set)
@@ -278,5 +270,4 @@ def parse_args():
 
 
 if __name__ == '__main__':
-    """ Entry point """
     main(parse_args())

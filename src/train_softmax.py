@@ -2,23 +2,25 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from datetime import datetime
-import os.path
-import time
-import sys
-import random
-import tensorflow as tf
-import numpy as np
-import importlib
 import argparse
-import facenet
-import lfw
-import h5py
+import importlib
 import math
+import os.path
+import random
+import sys
+import time
+from datetime import datetime
+
+import h5py
+import numpy as np
+import tensorflow.compat.v1 as tf
 import tensorflow.contrib.slim as slim
-from tensorflow.python.ops import data_flow_ops
 from tensorflow.python.framework import ops
 from tensorflow.python.ops import array_ops
+from tensorflow.python.ops import data_flow_ops
+
+import facenet
+import lfw
 
 
 def main(args):
@@ -556,7 +558,7 @@ def parse_arguments(argv):
                         help='The optimization algorithm to use', default='ADAM')
     parser.add_argument('--learning_rate', type=float,
                         help='Initial learning rate. If set to a negative value a learning rate ' +
-                             'schedule can be specified in the file "learning_rate_schedule.txt"', default=-1.0)
+                             'schedule can be specified in the file "learning_rate_schedule.txt"', default=-1.001)
     parser.add_argument('--learning_rate_decay_epochs', type=int,
                         help='Number of epochs between learning rate decay.', default=100)
     parser.add_argument('--learning_rate_decay_factor', type=float,
@@ -581,7 +583,7 @@ def parse_arguments(argv):
     parser.add_argument('--validate_every_n_epochs', type=int,
                         help='Number of epoch between validation', default=5)
     parser.add_argument('--validation_set_split_ratio', type=float,
-                        help='The ratio of the total dataset to use for validation', default=0.05)
+                        help='The ratio of the total dataset to use for validation', default=0.25)
     parser.add_argument('--min_nrof_val_images_per_class', type=float,
                         help='Classes with fewer images will be removed from the validation set', default=0)
 

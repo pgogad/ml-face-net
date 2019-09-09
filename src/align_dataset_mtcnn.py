@@ -33,8 +33,9 @@ def main(args):
     model_path = os.path.join(base, 'data', 'model')
 
     with tf.Graph().as_default():
-        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=args.gpu_memory_fraction)
-        sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
+        gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=args.gpu_memory_fraction)
+        sess = tf.compat.v1.Session(
+            config=tf.compat.v1.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
         with sess.as_default():
             pnet, rnet, onet = detect_face.create_mtcnn(sess, model_path)
 
@@ -140,7 +141,7 @@ def parse_arguments(argv):
     parser.add_argument('--input_dir', type=str, help='Directory with unaligned images.', default=INPUT)
     parser.add_argument('--output_dir', type=str, help='Directory with aligned face thumbnails.', default=OUT_PUT)
     parser.add_argument('--image_size', type=int,
-                        help='Image size (height, width) in pixels.', default=182)
+                        help='Image size (height, width) in pixels.', default=160)
     parser.add_argument('--margin', type=int,
                         help='Margin for the crop around the bounding box (height, width) in pixels.', default=44)
     parser.add_argument('--random_order',
