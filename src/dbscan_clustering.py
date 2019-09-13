@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import os
 
-import imageio
+from imageio import save
 import numpy as np
 import tensorflow as tf
 from sklearn.cluster import DBSCAN
@@ -12,6 +12,7 @@ from sklearn.cluster import DBSCAN
 import detect_face
 import facenet
 import pickle
+import imageio
 
 BASE_DIR = os.path.dirname(__file__)
 MTCNN_DIR = os.path.join(BASE_DIR, 'data', 'model')
@@ -87,11 +88,11 @@ def main():
                     os.makedirs(path)
 
                     for j in np.nonzero(labels == i)[0]:
-                        misc.imsave(os.path.join(path, str(cnt) + '.png'), images[j])
+                        save(os.path.join(path, str(cnt) + '.png'), images[j])
                         cnt += 1
                 else:
                     for j in np.nonzero(labels == i)[0]:
-                        misc.imsave(os.path.join(path, str(cnt) + '.png'), images[j])
+                        save(os.path.join(path, str(cnt) + '.png'), images[j])
                         cnt += 1
 
 

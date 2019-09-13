@@ -22,12 +22,10 @@ def main(args):
     image_list, label_list = facenet.get_image_paths_and_labels(train_set)
     # fetch the classes (labels as strings) exactly as it's done in get_dataset
     path_exp = os.path.expanduser(args.data_dir)
-    classes = [path for path in os.listdir(path_exp) \
-               if os.path.isdir(os.path.join(path_exp, path))]
+    classes = [path for path in os.listdir(path_exp) if os.path.isdir(os.path.join(path_exp, path))]
     classes.sort()
     # get the label strings
-    label_strings = [name for name in classes if \
-                     os.path.isdir(os.path.join(path_exp, name))]
+    label_strings = [name for name in classes if os.path.isdir(os.path.join(path_exp, name))]
 
     with tf.Graph().as_default():
 
