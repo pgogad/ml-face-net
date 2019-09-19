@@ -225,8 +225,7 @@ def main(args):
                     break
 
                 t = time.time()
-                if len(val_image_list) > 0 and ((
-                                                        epoch - 1) % args.validate_every_n_epochs == args.validate_every_n_epochs - 1 or epoch == args.max_nrof_epochs):
+                if len(val_image_list) > 0 and ((epoch - 1) % args.validate_every_n_epochs == args.validate_every_n_epochs - 1 or epoch == args.max_nrof_epochs):
                     validate(args, sess, epoch, val_image_list, val_label_list, enqueue_op, image_paths_placeholder,
                              labels_placeholder, control_placeholder,
                              phase_train_placeholder, batch_size_placeholder,
