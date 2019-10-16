@@ -5,12 +5,14 @@ import cv2
 import numpy as np
 from PIL import Image
 from keras.models import load_model
-from mtcnn.mtcnn import MTCNN
+# from mtcnn.mtcnn import MTCNN
+from utils.mtcnn import TrtMtcnn
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import Normalizer
 from sklearn.svm import SVC
 
-mtcnn_detector = MTCNN()
+# mtcnn_detector = MTCNN()
+mtcnn_detector = TrtMtcnn()
 BASE_DIR = os.path.dirname(__file__)
 model_dir = os.path.join(BASE_DIR, 'data', 'model')
 facenet_keras = os.path.join(BASE_DIR, 'data', 'model', 'facenet_keras.h5')
@@ -70,7 +72,8 @@ while True:
         sleep(5)
     ret, frame = video_capture.read()
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    faces = mtcnn_detector.detect_faces(frame_rgb)
+    # faces = mtcnn_detector.detect_faces(frame_rgb)
+    faces = mtcnn_detector.detect(frame_rgb)
 
     for i, face in enumerate(faces):
         face_array = extract_face(frame, faces[i]['box'])
