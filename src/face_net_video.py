@@ -1,18 +1,22 @@
+import argparse
 import os
+import sys
 from time import sleep
 
 import cv2
 import numpy as np
 from PIL import Image
 from keras.models import load_model
-# from mtcnn.mtcnn import MTCNN
-from utils.mtcnn import TrtMtcnn
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import Normalizer
 from sklearn.svm import SVC
 
-# mtcnn_detector = MTCNN()
-mtcnn_detector = TrtMtcnn()
+from utils.camera import add_camera_args, Camera
+from utils.display import open_window, set_display
+from utils.mtcnn import TrtMtcnn
+
+# mtcnn_detector = TrtMtcnn()
+WINDOW_NAME = 'TestWindow'
 BASE_DIR = os.path.dirname(__file__)
 model_dir = os.path.join(BASE_DIR, 'data', 'model')
 facenet_keras = os.path.join(BASE_DIR, 'data', 'model', 'facenet_keras.h5')
@@ -65,35 +69,67 @@ testy = out_encoder.transform(testy)
 model_svc = SVC(kernel='linear', probability=True)
 model_svc.fit(trainX, trainy)
 
-video_capture = cv2.VideoCapture(0)
 
-while True:
-    if not video_capture.isOpened():
-        sleep(5)
-    ret, frame = video_capture.read()
-    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    # faces = mtcnn_detector.detect_faces(frame_rgb)
-    faces = mtcnn_detector.detect(frame_rgb)
+def loop_and_detect(cam, mtcnn, minsize=40):
+    while True:
+        if cv2.getWindowProperty(WINDOW_NAME, 0) < 0:
+            break
 
-    for i, face in enumerate(faces):
-        face_array = extract_face(frame, faces[i]['box'])
-        x, y, w, h = faces[i]['box']
-        samples = np.expand_dims(get_embedding(model_fn, face_array), axis=0)
-        yhat_class = model_svc.predict(samples)
-        yhat_prob = model_svc.predict_proba(samples)
-        class_index = yhat_class[0]
-        class_probability = yhat_prob[0, class_index] * 100
-        predict_names = out_encoder.inverse_transform(yhat_class)
-        if class_probability > 49.0:
-            text = '%s (probability = %.2f pc)' % (predict_names[0], class_probability)
-        else:
-            text = '%s (probability = %.2f pc)' % ('unknown', 0.00)
+        cam.open()
+        if not cam.is_opened():
+            sleep(5)
+        ret, frame = cam.read()
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        # faces = mtcnn_detector.detect_faces(frame_rgb)
+        faces = mtcnn.detect(frame_rgb, minsize=minsize)
 
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 0), 2)
-        cv2.putText(frame, text, (x + 5, h), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), lineType=cv2.LINE_8)
-    cv2.imshow('Live Stream', frame)
-    if cv2.waitKey(5) == 27:
-        break
+        for i, face in enumerate(faces):
+            face_array = extract_face(frame, faces[i]['box'])
+            x, y, w, h = faces[i]['box']
+            samples = np.expand_dims(get_embedding(model_fn, face_array), axis=0)
+            yhat_class = model_svc.predict(samples)
+            yhat_prob = model_svc.predict_proba(samples)
+            class_index = yhat_class[0]
+            class_probability = yhat_prob[0, class_index] * 100
+            predict_names = out_encoder.inverse_transform(yhat_class)
+            if class_probability > 49.0:
+                text = '%s (probability = %.2f pc)' % (predict_names[0], class_probability)
+            else:
+                text = '%s (probability = %.2f pc)' % ('unknown', 0.00)
 
-video_capture.release()
-cv2.destroyAllWindows()
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 0), 2)
+            cv2.putText(frame, text, (x + 5, h), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), lineType=cv2.LINE_8)
+        cv2.imshow('Live Stream', frame)
+        if cv2.waitKey(5) == 27:
+            break
+
+
+def parse_args():
+    """Parse input arguments."""
+    desc = 'Capture and display live camera video, while doing real-time face detection with TrtMtcnn on Jetson Nano'
+    parser = argparse.ArgumentParser(description=desc)
+    parser = add_camera_args(parser)
+    parser.add_argument('--minsize', type=int, default=40, help='minsize (in pixels) for detection [40]')
+    args = parser.parse_args()
+    return args
+
+
+def main():
+    args = parse_args()
+    mtcnn_detector = TrtMtcnn()
+    video_capture = Camera(args)
+    video_capture.open()
+    if not video_capture.is_opened:
+        sys.exit('Failed to open camera!')
+
+    open_window(WINDOW_NAME, args.image_width, args.image_height, 'Camera TensorRT MTCNN Demo for Jetson Nano')
+    loop_and_detect(video_capture, mtcnn_detector, minsize=args.minsize)
+    video_capture.stop()
+    video_capture.release()
+    cv2.destroyAllWindows()
+
+    del mtcnn_detector
+
+
+if __name__ == '__main__':
+    main()
